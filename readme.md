@@ -23,7 +23,7 @@ $ flask student get_report_by_id <id>
 ```
 
 ```bash
-$ flask student update_student <student_id> [firstname] [lastname] [new_student_id]
+$ flask student update_student
 ```
 
 ```bash
@@ -31,7 +31,7 @@ $ flask student delete
 ```
 
 ```bash
-$ flask student update_report <report_id> [review] [rating]
+$ flask student update_report
 ```
 
 ```bash
