@@ -1,5 +1,5 @@
 import click, pytest, sys
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask.cli import with_appcontext, AppGroup
 
 from App.database import db, get_migrate
@@ -99,7 +99,6 @@ def delete_staff_command():
         print(f"{result}")
 
 
-
 @staff_cli.command("create_report", help="Creates a report for a given student")
 def create_report_command():
     students = get_all_students()
@@ -144,6 +143,7 @@ def create_report_command():
 
     result = create_report(selected_student.id, selected_staff.id, report, int(rating))
     print(result)
+
 
 @staff_cli.command("update_report", help="Updates an existing report")
 def update_report_command():
@@ -210,10 +210,11 @@ def update_report_command():
     else:
         print("Invalid input. Please enter 'id', 'student', or 'list'.")
 
-        
+
 @staff_cli.command("delete_report", help="Deletes an existing report")
 def delete_report_command():
-    input_choice = click.prompt("Do you want to delete by report ID, student ID, or student name? (id/student_id/student_name)")
+    input_choice = click.prompt(
+        "Do you want to delete by report ID, student ID, or student name? (id/student_id/student_name)")
 
     if input_choice.lower() == "id":
         report_id = click.prompt("Enter the report ID")
@@ -228,7 +229,7 @@ def delete_report_command():
             if not reports:
                 print("No reports found for this student.")
                 return
-            
+
             print("Select a report to delete:")
             for index, report in enumerate(reports, start=1):
                 print(f"{index}\tID: {report.id}\tRating: {report.rating}\tReview: {report.review}")
@@ -252,7 +253,7 @@ def delete_report_command():
             if not reports:
                 print("No reports found for this student.")
                 return
-            
+
             print("Select a report to delete:")
             for index, report in enumerate(reports, start=1):
                 print(f"{index}\tID: {report.id}\tRating: {report.rating}\tReview: {report.review}")
@@ -369,6 +370,7 @@ def update_student_command():
     else:
         print("Invalid input. Please enter 'name', 'id', or 'none'.")
 
+
 @student_cli.command("delete", help="Deletes an existing student")
 def delete_student_command():
     students = get_all_students()
@@ -394,9 +396,6 @@ def delete_student_command():
         print(f"{result}")
 
 
-
-
-
 @student_cli.command("list_reports", help="Lists all reports")
 @click.argument("order", default='asc')
 def list_reports_command(order):
@@ -414,12 +413,11 @@ def list_reports_command(order):
             f"{report.id}\t{student.firstname} {student.lastname}\t{report.rating}\t{report.date.strftime('%Y-%m-%d')}\t{report.review}\t{get_staff_by_id(report.staff_id).username}")
 
 
-
 @student_cli.command("search_by_id", help="Search for a student by ID")
-@click.argument("student_id", default = "816021379")
+@click.argument("student_id", default="816021379")
 def search_student_by_id_command(student_id):
     student = get_student_by_id(student_id)
-    if isinstance(student,Student):
+    if isinstance(student, Student):
         print("Student found:")
         print("ID\tFirst Name\tLast Name")
         print("-" * 40)
@@ -433,12 +431,13 @@ def search_student_by_id_command(student_id):
 @click.argument("lastname")
 def search_students_by_name_command(firstname, lastname):
     student = get_student_by_name(firstname, lastname)
-    if isinstance(student,Student):
-            print(f"{student.student_id}\t{student.firstname}\t{student.lastname}")
-            if student.reports:
-                    print("ID\tRating\tDate\tReview\tStaff Name")
-            for report in student.reports:
-                print(f"{report.id}\t{report.rating}\t{report.date.strftime('%Y-%m-%d')}\t{report.review}\t{get_staff_by_id(report.staff_id).username}")
+    if isinstance(student, Student):
+        print(f"{student.student_id}\t{student.firstname}\t{student.lastname}")
+        if student.reports:
+            print("ID\tRating\tDate\tReview\tStaff Name")
+        for report in student.reports:
+            print(
+                f"{report.id}\t{report.rating}\t{report.date.strftime('%Y-%m-%d')}\t{report.review}\t{get_staff_by_id(report.staff_id).username}")
     else:
         print(f"No students found matching the name: {firstname} {lastname}")
 
@@ -464,3 +463,11 @@ def user_tests_command(type):
 
 
 app.cli.add_command(test)
+
+
+@app.route('/login', methods=['POST'])
+def staff_login_route():
+    data = request.json
+    print(data)
+    return ""
+
