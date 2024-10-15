@@ -101,7 +101,7 @@ def delete_staff_command():
 
 @staff_cli.command("create_report", help="Creates a report for a given student")
 def create_report_command():
-    students,code = get_all_students()
+    students, code = get_all_students()
     if not students:
         print("No students found.")
         return
@@ -117,7 +117,7 @@ def create_report_command():
 
     selected_student = students[int(selected_index) - 1]
 
-    staff_members,code = get_all_staff()
+    staff_members, code = get_all_staff()
     if not staff_members:
         print("No staff members found.")
         return
@@ -460,6 +460,22 @@ def user_tests_command(type):
         sys.exit(pytest.main(["-k", "UserIntegrationTests"]))
     else:
         sys.exit(pytest.main(["-k", "App"]))
+
+
+@test.command("all", help="Run all tests (unit and integration)")
+def all_tests_command():
+    sys.exit(pytest.main(["-k", "integration_tests or unit_tests"]))
+
+
+@test.command("unit", help="Run unit tests")
+def unit_tests_command():
+    sys.exit(pytest.main(["-k", "unit_tests"]))
+
+
+@test.command("int", help="Run integration tests")
+def integration_tests_command():
+    """Runs integration tests."""
+    sys.exit(pytest.main(["-k", "integration_tests"]))
 
 
 app.cli.add_command(test)
