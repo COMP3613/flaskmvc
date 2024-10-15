@@ -463,11 +463,3 @@ def user_tests_command(type):
 
 
 app.cli.add_command(test)
-
-
-@app.route('/login', methods=['POST'])
-def staff_login_route():
-    data = request.json
-    print(data)
-    return ""
-
