@@ -42,6 +42,8 @@ def create_report_action():
 def get_searchstudent_page():
     student_id = request.args.get('student_id')
     student_id = int(student_id)
+    if not student_id:
+        return jsonify({"error":"Student ID field is empty"}),400
     result,code = get_student_reports_json(student_id)
     result = result.get_json()
     return jsonify({"query-result": f"{result}"})
