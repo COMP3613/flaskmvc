@@ -16,12 +16,14 @@ report_views = Blueprint('report_views', __name__, template_folder='../templates
 
 
 @report_views.route('/api/report/list', methods=['GET'])
+@jwt_required()
 def view_all_reports():
     reports,code = get_all_reports_json()
     return jsonify(reports.get_json()),code
 
 
 @report_views.route('/api/report/add', methods=['POST'])
+@jwt_required()
 def create_report_action():
     data = request.json
     student_id = int(data['student_id'])
@@ -36,6 +38,7 @@ def create_report_action():
 
 
 @report_views.route('/api/report/search-id', methods=['GET'])
+@jwt_required()
 def get_searchstudent_page():
     student_id = request.args.get('student_id')
     student_id = int(student_id)
@@ -45,6 +48,7 @@ def get_searchstudent_page():
 
 
 @report_views.route('/api/report/delete', methods=['POST'])
+@jwt_required()
 def delete_searchstudent():
     report = request.json
     report = int(report.get('report_id'))
@@ -56,6 +60,7 @@ def delete_searchstudent():
 
 
 @report_views.route('/api/report/update', methods=['POST'])
+@jwt_required()
 def update_report_page():
     data = request.json
     report_id = int(data['report_id'])
