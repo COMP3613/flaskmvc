@@ -101,7 +101,7 @@ def delete_staff_command():
 
 @staff_cli.command("create_report", help="Creates a report for a given student")
 def create_report_command():
-    students = get_all_students()
+    students,code = get_all_students()
     if not students:
         print("No students found.")
         return
@@ -117,7 +117,7 @@ def create_report_command():
 
     selected_student = students[int(selected_index) - 1]
 
-    staff_members = get_all_staff()
+    staff_members,code = get_all_staff()
     if not staff_members:
         print("No staff members found.")
         return
