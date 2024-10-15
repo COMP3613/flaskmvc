@@ -31,8 +31,10 @@ def update_student_route():
     if not student_id or not firstname or not lastname:
         return jsonify({"error": "Missing required fields"}), 400
 
-    result, status_code = create_student(student_id, firstname, lastname)
-    result = get_student_as_json(student_id)
+    result, status_code = update_student(student_id, firstname, lastname)
+    if status_code == 404:
+        return result, status_code
+    result, status_code = get_student_as_json(student_id)
     return result, status_code
 
 
@@ -47,18 +49,14 @@ def create_student_route():
     if not student_id or not firstname or not lastname:
         return jsonify({"error": "Missing required fields"}), 400
 
-    if get_student_by_id(student_id) is Student:
-        return jsonify({"error": "Student already exists"}), 400
+    student,code = get_student_by_id(student_id)
+    if code == 200:
+        return jsonify({"error": "Student already exists"}), 422
 
     result, status_code = create_student(student_id, firstname, lastname)
-    result = get_student_as_json(student_id)
+    result, code = get_student_as_json(student_id)
 
     return result, status_code
 
-
-@student_views.route('/api/student/list', methods=['GET'])
-def list_student_route():
-    res = get_all_students_json()
-    return res
 
 
