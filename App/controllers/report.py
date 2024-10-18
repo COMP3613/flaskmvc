@@ -22,10 +22,10 @@ def create_report(student_id, staff_id, review, rating):
     print(student)
     print(staff)
     if not student or not staff:
-        return "Student or staff member not found."
+        return "Student or staff member not found.", 404
 
     if not 1 <= rating <= 5:
-        return "Invalid rating. Rating must be between 1 and 5."
+        return "Invalid rating. Rating must be between 1 and 5.", 400
 
     new_report = Report(
         student_id=student.id,
@@ -37,7 +37,7 @@ def create_report(student_id, staff_id, review, rating):
     db.session.add(new_report)
     db.session.commit()
 
-    return f"Report created for {student.firstname} {student.lastname} by {staff.username}: {review} with rating {rating}"
+    return f"Report created for {student.firstname} {student.lastname} by {staff.username}: {review} with rating {rating}", 201
 
 
 def get_student_reports(student_id):
@@ -74,7 +74,7 @@ def update_report(report_id, review, rating, new_student_id=None):
 def delete_report(report_id):
     report = Report.query.get(report_id)
     if not report:
-        return "Report not found."
+        return "Report not found.", 404
     db.session.delete(report)
     db.session.commit()
-    return f"Report {report_id} deleted successfully."
+    return f"Report {report_id} deleted successfully.", 200

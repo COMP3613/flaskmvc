@@ -15,10 +15,10 @@ def test_client():
     app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
     with app.test_client() as testing_client:
         with app.app_context():
-            db.create_all()  # Set up the database
+            db.create_all()
             yield testing_client
             db.session.remove()
-            db.drop_all()  # Drop the database after the test
+            db.drop_all()
 
 
 def test_create_user(test_client):
