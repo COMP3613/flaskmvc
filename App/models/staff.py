@@ -1,3 +1,4 @@
+from App.models import User
 from App.database import db
 from .user import User
 
@@ -7,6 +8,10 @@ class Staff(User):
     department = db.Column(db.String(100), nullable=True)
     faculty = db.Column(db.String(100), nullable=False)
     reports = db.relationship('Report', back_populates='staff')
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'staff'
+    }
 
     def __init__(self, username, password, department, faculty):
         super().__init__(username=username, password=password)
